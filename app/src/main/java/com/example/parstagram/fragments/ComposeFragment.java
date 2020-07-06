@@ -38,8 +38,6 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ComposeFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class ComposeFragment extends Fragment {
 
