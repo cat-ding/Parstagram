@@ -24,6 +24,7 @@
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:ems="10"
         android:hint="username"></EditText>
@@ -32,6 +33,7 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_weight="10"
         android:hint="password"
         android:inputType="textPassword"></EditText>
@@ -40,14 +42,20 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
-        android:text="Login"></Button>
+        android:background="#3897F1"
+        android:text="Login"
+        android:textColor="#FFFFFF"></Button>
 
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
-        android:text="Sign Up" />
+        android:background="#4FC43B"
+        android:text="Sign Up"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

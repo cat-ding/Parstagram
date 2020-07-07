@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.LoginActivity;
@@ -39,8 +40,9 @@ public class ProfileFragment extends Fragment {
     private TextView tvUsername;
     private Button btnLogout;
     private ImageView ivProfileImage; // TODO: handle this later
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
+    private PostsAdapter adapter;
+    private List<Post> allPosts;
+    private SwipeRefreshLayout swipeContainer;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,6 +62,7 @@ public class ProfileFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         btnLogout = view.findViewById(R.id.btnLogout);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
+        swipeContainer = view.findViewById(R.id.swipeContainer);
 
         tvUsername.setText(ParseUser.getCurrentUser().getUsername());
 
@@ -75,6 +78,19 @@ public class ProfileFragment extends Fragment {
                 Intent i = new Intent(getContext(), LoginActivity.class);
                 startActivity(i);
                 getActivity().finish();
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "fetching new data!");
+                queryPosts();
             }
         });
 
@@ -98,8 +114,9 @@ public class ProfileFragment extends Fragment {
                     Log.e(TAG, "Issue with getting posts", e);
                     return;
                 }
-                allPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
+                adapter.clear();
+                adapter.addAll(posts);
+                swipeContainer.setRefreshing(false);
             }
         });
     }
