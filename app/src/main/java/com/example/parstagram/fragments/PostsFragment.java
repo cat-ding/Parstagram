@@ -31,8 +31,8 @@ public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
     private RecyclerView rvPosts;
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
+    private PostsAdapter adapter;
+    private List<Post> allPosts;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -46,7 +46,7 @@ public class PostsFragment extends Fragment {
     }
 
     @Override
-    public void  onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
 
@@ -57,7 +57,7 @@ public class PostsFragment extends Fragment {
         queryPosts();
     }
 
-    protected void queryPosts() {
+    private void queryPosts() {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);

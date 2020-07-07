@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <TextView
+        android:id="@+id/tvLogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/billabong"
+        android:gravity="center"
+        android:text="Parstagram"
+        android:textColor="#323232"
+        android:textSize="30sp" />
+
+</Toolbar>
