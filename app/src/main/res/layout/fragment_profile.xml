@@ -14,20 +14,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:paddingStart="15dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="5dp">
 
         <ImageView
-            android:id="@+id/tvProfileImage"
+            android:id="@+id/ivProfileImage"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            tools:srcCompat="@tools:sample/avatars"/>
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/tvProfileImage"
+            android:layout_toEndOf="@+id/ivProfileImage"
             android:textSize="20sp"
             tools:text="cat" />
 
@@ -36,9 +39,9 @@
             android:layout_width="71dp"
             android:layout_height="37dp"
             android:layout_below="@+id/tvUsername"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/tvProfileImage"
+            android:layout_toEndOf="@+id/ivProfileImage"
             android:text="Logout"
             android:textSize="12sp" />
 

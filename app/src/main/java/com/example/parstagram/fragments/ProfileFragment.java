@@ -16,12 +16,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -57,6 +59,14 @@ public class ProfileFragment extends Fragment {
         rvPosts = view.findViewById(R.id.rvPosts);
         tvUsername = view.findViewById(R.id.tvUsername);
         btnLogout = view.findViewById(R.id.btnLogout);
+        ivProfileImage = view.findViewById(R.id.ivProfileImage);
+
+        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+
+        ParseFile image = ParseUser.getCurrentUser().getParseFile("profileImage");
+        if (image != null) {
+            Glide.with(getContext()).load(image.getUrl()).circleCrop().into(ivProfileImage);
+        }
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
