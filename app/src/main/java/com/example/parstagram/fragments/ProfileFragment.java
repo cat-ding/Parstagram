@@ -1,7 +1,13 @@
 package com.example.parstagram.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,25 +37,32 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
+    public static final String KEY_PROFILE_IMAGE = "profileImage";
     public static final int NUM_POSTS = 20;
     private RecyclerView rvPosts;
     private TextView tvUsername;
     private Button btnLogout;
+    private Button btnChangeProfile;
     private ImageView ivProfileImage;
     private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
     private ParseUser user;
+    private File photoFile;
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 35;
+    public String photoFileName = "photo.jpg";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -72,6 +87,7 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         swipeContainer = view.findViewById(R.id.swipeContainer);
+        btnChangeProfile = view.findViewById(R.id.btnChangeProfile);
 
         tvUsername.setText(user.getUsername());
 
@@ -80,7 +96,7 @@ public class ProfileFragment extends Fragment {
             btnLogout.setVisibility(View.VISIBLE);
         }
 
-        ParseFile image = user.getParseFile("profileImage");
+        ParseFile image = user.getParseFile(KEY_PROFILE_IMAGE);
         if (image != null) {
             Glide.with(getContext()).load(image.getUrl()).circleCrop().into(ivProfileImage);
         }
@@ -92,6 +108,13 @@ public class ProfileFragment extends Fragment {
                 Intent i = new Intent(getContext(), LoginActivity.class);
                 startActivity(i);
                 getActivity().finish();
+            }
+        });
+
+        btnChangeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchCamera();
             }
         });
 
@@ -117,7 +140,6 @@ public class ProfileFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d(TAG, "onLoadMore " + page);
                 loadMoreData(page);
             }
         };
@@ -125,6 +147,61 @@ public class ProfileFragment extends Fragment {
         rvPosts.addOnScrollListener(scrollListener);
 
         queryPosts();
+    }
+
+    private void launchCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = getPhotoFileUri(photoFileName);
+
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    private File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                saveProfilePhoto();
+            } else { // Result was a failure
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void saveProfilePhoto() {
+        ParseUser user = ParseUser.getCurrentUser();
+        user.put(KEY_PROFILE_IMAGE, new ParseFile(photoFile));
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving", e);
+                    Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
+                }
+                Log.i(TAG, "Post save was successful!");
+                // clear out old data
+                Glide.with(getContext()).load(ParseUser.getCurrentUser().getParseFile(KEY_PROFILE_IMAGE).getUrl()).circleCrop().into(ivProfileImage);
+                queryPosts(); // update posts with new profile photo
+            }
+        });
     }
 
     private void loadMoreData(int page) {

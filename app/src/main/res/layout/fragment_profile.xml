@@ -40,9 +40,20 @@
             android:layout_height="38dp"
             android:layout_below="@+id/tvUsername"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@+id/ivProfileImage"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/btnChangeProfile"
             android:text="Logout"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnChangeProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_below="@+id/tvUsername"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/ivProfileImage"
+            android:text="Change Photo"
             android:textSize="12sp" />
 
     </RelativeLayout>
