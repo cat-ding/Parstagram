@@ -106,7 +106,7 @@ public class PostsFragment extends Fragment {
                     Log.e(TAG, "Issue with getting posts", e);
                     return;
                 }
-                adapter.addAll(posts);
+                adapter.addAllPosts(posts);
             }
         });
     }
@@ -125,8 +125,9 @@ public class PostsFragment extends Fragment {
                     return;
                 }
                 adapter.clear();
-                adapter.addAll(posts);
+                adapter.addAllPosts(posts);
                 swipeContainer.setRefreshing(false);
+                Log.d(TAG, "date: " + posts.get(0).getCreatedAt().toString());
             }
         });
     }
