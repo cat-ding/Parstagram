@@ -22,6 +22,7 @@ import com.example.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -35,6 +36,7 @@ import java.util.List;
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
+    public static final int NUM_POSTS = 20;
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
     private List<Post> allPosts;
@@ -82,24 +84,39 @@ public class PostsFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                loadMoreData();
+                Log.d(TAG, "onLoadMore " + page);
+                loadMoreData(page);
             }
         };
-        // add the scroll listener to the recyclerview
         rvPosts.addOnScrollListener(scrollListener);
 
         queryPosts();
     }
 
-    private void loadMoreData() {
+    private void loadMoreData(int page) {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(NUM_POSTS);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.setSkip(NUM_POSTS * page);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                adapter.addAll(posts);
+            }
+        });
     }
 
     private void queryPosts() {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(20);
-        query.addDescendingOrder(Post.KEY_CREATED);
+        query.setLimit(NUM_POSTS);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {

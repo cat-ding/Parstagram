@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
@@ -37,6 +38,7 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
+    public static final int NUM_POSTS = 20;
     private RecyclerView rvPosts;
     private TextView tvUsername;
     private Button btnLogout;
@@ -44,6 +46,7 @@ public class ProfileFragment extends Fragment {
     private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
     private ParseUser user;
 
     public ProfileFragment() {
@@ -108,16 +111,46 @@ public class ProfileFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(layoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d(TAG, "onLoadMore " + page);
+                loadMoreData(page);
+            }
+        };
+        // add the scroll listener to the recyclerview
+        rvPosts.addOnScrollListener(scrollListener);
+
         queryPosts();
+    }
+
+    private void loadMoreData(int page) {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(NUM_POSTS);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.setSkip(NUM_POSTS * page);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                adapter.addAll(posts);
+            }
+        });
     }
 
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereEqualTo(Post.KEY_USER, user);
-        query.setLimit(20);
-        query.addDescendingOrder(Post.KEY_CREATED);
+        query.setLimit(NUM_POSTS);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
