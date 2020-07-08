@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.fragments.ProfileFragment;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -64,6 +68,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivImage;
         private TextView tvDescription;
         private ImageView ivProfileImage;
+        private RelativeLayout relativeLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,9 +76,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            relativeLayout = itemView.findViewById(R.id.relativeLayout);
         }
 
-        public void bind(Post post) {
+        public void bind(final Post post) {
             // bind the post data to the view elements
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
@@ -87,6 +93,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (profileImage != null) {
                 Glide.with(context).load(profileImage.getUrl()).circleCrop().into(ivProfileImage);
             }
+
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+                    Fragment fragment = new ProfileFragment(post.getUser());
+                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                }
+            });
         }
     }
 }

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_profile:
                     default:
-                        fragment = new ProfileFragment();
+                        fragment = new ProfileFragment(ParseUser.getCurrentUser());
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();

@@ -23,6 +23,7 @@ import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -35,17 +36,22 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    public static final String TAG = "PostsFragment";
+    public static final String TAG = "ProfileFragment";
     private RecyclerView rvPosts;
     private TextView tvUsername;
     private Button btnLogout;
-    private ImageView ivProfileImage; // TODO: handle this later
+    private ImageView ivProfileImage;
     private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
+    private ParseUser user;
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public ProfileFragment(ParseUser user) {
+        this.user = user;
     }
 
     @Override
@@ -64,9 +70,14 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         swipeContainer = view.findViewById(R.id.swipeContainer);
 
-        tvUsername.setText(ParseUser.getCurrentUser().getUsername());
+        tvUsername.setText(user.getUsername());
 
-        ParseFile image = ParseUser.getCurrentUser().getParseFile("profileImage");
+        btnLogout.setVisibility(View.GONE);
+        if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            btnLogout.setVisibility(View.VISIBLE);
+        }
+
+        ParseFile image = user.getParseFile("profileImage");
         if (image != null) {
             Glide.with(getContext()).load(image.getUrl()).circleCrop().into(ivProfileImage);
         }
@@ -104,7 +115,7 @@ public class ProfileFragment extends Fragment {
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, user);
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED);
         query.findInBackground(new FindCallback<Post>() {

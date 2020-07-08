@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
@@ -34,10 +35,11 @@ import java.util.List;
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
-    private RecyclerView rvPosts;
+    protected RecyclerView rvPosts;
     private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -74,8 +76,22 @@ public class PostsFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(layoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                loadMoreData();
+            }
+        };
+        // add the scroll listener to the recyclerview
+        rvPosts.addOnScrollListener(scrollListener);
+
         queryPosts();
+    }
+
+    private void loadMoreData() {
     }
 
     private void queryPosts() {
