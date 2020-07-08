@@ -19,6 +19,7 @@ public class Post extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
     public String getDescription() {
@@ -46,7 +47,6 @@ public class Post extends ParseObject {
     public String getTime() {
         String createdAt = getCreatedAt().toString();
 
-        String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
         sf.setLenient(true);
 

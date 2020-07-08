@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.parstagram.MainActivity;
@@ -48,6 +49,7 @@ public class ComposeFragment extends Fragment {
     private ImageView ivPostImage;
     private Button btnSubmit;
     private File photoFile;
+    private ProgressBar progressBar;
     public String photoFileName = "photo.jpg";
 
     public ComposeFragment() {
@@ -73,6 +75,7 @@ public class ComposeFragment extends Fragment {
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         ivPostImage = view.findViewById(R.id.ivPostImage);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        progressBar = view.findViewById(R.id.progressBar);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +96,7 @@ public class ComposeFragment extends Fragment {
                     Toast.makeText(getContext(), "There is no image!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                progressBar.setVisibility(View.VISIBLE);
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);
             }
@@ -167,6 +171,7 @@ public class ComposeFragment extends Fragment {
                 // clear out old data
                 etDescription.setText("");
                 ivPostImage.setImageResource(0);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
