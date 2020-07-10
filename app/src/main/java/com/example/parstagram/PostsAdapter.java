@@ -2,16 +2,14 @@ package com.example.parstagram;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,15 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.fragments.ProfileFragment;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
-import java.nio.charset.MalformedInputException;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
@@ -80,7 +79,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivProfileImage;
         private RelativeLayout relativeLayout;
         private TextView tvTime;
-        private ImageView ivLike; // TODO
+        private ImageView ivLike;
         private ImageView ivComment;
 
         public ViewHolder(@NonNull View itemView) {
@@ -92,6 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
             tvTime = itemView.findViewById(R.id.tvTime);
             ivComment = itemView.findViewById(R.id.ivComment);
+            ivLike = itemView.findViewById(R.id.ivLike);
 
             itemView.setOnClickListener(this);
         }
@@ -129,9 +129,79 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 }
             });
+
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if ((int) ivLike.getTag() == R.drawable.ufi_heart) {
+                        ivLike.setImageResource(R.drawable.ufi_heart_active);
+                        ivLike.setTag(R.drawable.ufi_heart_active);
+                        queryNewLike(post.getObjectId());
+                    } else {
+                        Log.d(TAG, "TAG ACTIVE");
+                        ivLike.setImageResource(R.drawable.ufi_heart);
+                        ivLike.setTag(R.drawable.ufi_heart);
+                        queryDeleteLike(post.getObjectId());
+                    }
+                }
+            });
+
+            queryLikes(post.getObjectId());
         }
 
-        @Override
+        private void queryLikes(String postId) {
+            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+            query.include(Like.KEY_USER);
+            query.whereEqualTo(Like.KEY_POST_ID, postId);
+            query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
+            query.findInBackground(new FindCallback<Like>() {
+                @Override
+                public void done(List<Like> likes, ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "Error retrieving likes!", e);
+                        return;
+                    }
+                    Log.i(TAG, "Successfully retrieved likes!");
+                    if (likes.isEmpty()) {
+                        ivLike.setImageResource(R.drawable.ufi_heart);
+                        ivLike.setTag(R.drawable.ufi_heart);
+                    } else {
+                        ivLike.setImageResource(R.drawable.ufi_heart_active);
+                        ivLike.setTag(R.drawable.ufi_heart_active);
+                    }
+                }
+            });
+        }
+
+        private void queryNewLike(final String postId) {
+            Like like = new Like();
+            like.put(Comment.KEY_USER, ParseUser.getCurrentUser());
+            like.put(Comment.KEY_POST_ID, postId);
+            like.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "Error while saving comment", e);
+                        return;
+                    }
+                    Log.i(TAG, "Like save was successful!");
+                }
+            });
+        }
+
+        private void queryDeleteLike(String postId) {
+            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+            query.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
+            query.whereEqualTo(Like.KEY_POST_ID, postId);
+            query.findInBackground(new FindCallback<Like>() {
+                @Override
+                public void done(List<Like> like, ParseException e) {
+                    like.get(0).deleteInBackground();
+                }
+            });
+        }
+
+            @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
 

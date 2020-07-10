@@ -96,6 +96,7 @@ public class CommentsActivity extends AppCompatActivity {
                 if (e != null) {
                     Log.e(TAG, "Error while saving comment", e);
                     Toast.makeText(CommentsActivity.this, "Error while posting comment!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 Log.i(TAG, "Comment save was successful!");
                 etComment.getText().clear();
@@ -109,7 +110,6 @@ public class CommentsActivity extends AppCompatActivity {
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
         query.include(Comment.KEY_USER);
         query.whereEqualTo(Comment.KEY_POST_ID, postId);
-        query.setLimit(NUM_COMMENTS);
         query.findInBackground(new FindCallback<Comment>() {
             @Override
             public void done(List<Comment> comments, ParseException e) {

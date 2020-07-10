@@ -75,7 +75,7 @@
             android:id="@+id/ivSave"
             android:layout_width="19dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="240dp"
+            android:layout_marginLeft="230dp"
             android:layout_toRightOf="@id/ivShare"
             android:background="@null"
             android:src="@drawable/ufi_save" />
