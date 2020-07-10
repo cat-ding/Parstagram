@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -79,6 +80,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivProfileImage;
         private RelativeLayout relativeLayout;
         private TextView tvTime;
+        private ImageButton btnLike; // TODO
+        private ImageButton btnComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,6 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
             tvTime = itemView.findViewById(R.id.tvTime);
+            btnComment = itemView.findViewById(R.id.btnComment);
 
             itemView.setOnClickListener(this);
         }
@@ -107,6 +111,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (profileImage != null) {
                 Glide.with(context).load(profileImage.getUrl()).circleCrop().into(ivProfileImage);
             }
+
+            btnComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, CommentsActivity.class);
+                    intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+                    context.startActivity(intent);
+                }
+            });
 
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
