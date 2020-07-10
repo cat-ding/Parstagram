@@ -19,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.fragments.ProfileFragment;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -122,7 +125,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (position != RecyclerView.NO_POSITION) {
                 Post post = posts.get(position);
                 Intent intent = new Intent(context, PostDetailActivity.class);
-//                intent.putExtra("adapterPosition", getAdapterPosition());
                 intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
                 context.startActivity(intent);
             }

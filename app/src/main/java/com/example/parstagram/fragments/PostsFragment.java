@@ -127,7 +127,6 @@ public class PostsFragment extends Fragment {
                 adapter.clear();
                 adapter.addAllPosts(posts);
                 swipeContainer.setRefreshing(false);
-                Log.d(TAG, "date: " + posts.get(0).getCreatedAt().toString());
             }
         });
     }

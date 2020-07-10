@@ -92,8 +92,10 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(user.getUsername());
 
         btnLogout.setVisibility(View.GONE);
+        btnChangeProfile.setVisibility(View.GONE);
         if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
             btnLogout.setVisibility(View.VISIBLE);
+            btnChangeProfile.setVisibility(View.VISIBLE);
         }
 
         ParseFile image = user.getParseFile(KEY_PROFILE_IMAGE);
