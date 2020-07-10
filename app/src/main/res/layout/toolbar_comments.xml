@@ -7,14 +7,16 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <TextView
-        android:id="@+id/tvLogo"
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/billabong"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/proxima_nova_regular"
         android:gravity="center"
-        android:text="@string/parstagram"
+        android:text="Comments"
         android:textColor="#323232"
-        android:textSize="30sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 
 </Toolbar>

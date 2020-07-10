@@ -22,7 +22,8 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:textSize="11sp"
+        android:textSize="12sp"
+        android:textStyle="bold"
         tools:text="cat" />
 
     <TextView
@@ -32,6 +33,6 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/tvUsername"
-        android:textSize="11sp"
+        android:textSize="12sp"
         tools:text="This is my comment!" />
 </RelativeLayout>

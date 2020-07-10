@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,10 +32,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvDescription;
     private TextView tvTime;
     private Post post;
-    protected RecyclerView rvComments;
-    private CommentsAdapter adapter;
-    private List<Comment> allComments;
-    private String postId;
+    private TextView tvViewComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +40,22 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
 
         post = (Post) Parcels.unwrap(getIntent().getParcelableExtra(Post.class.getSimpleName()));
-        postId = post.getObjectId();
 
         tvUsername = findViewById(R.id.tvUsername);
         ivProfileImage = findViewById(R.id.ivProfileImage);
         ivImage = findViewById(R.id.ivImage);
         tvDescription = findViewById(R.id.tvDescription);
         tvTime = findViewById(R.id.tvTime);
-        rvComments = findViewById(R.id.rvComments);
+        tvViewComments = findViewById(R.id.tvViewComments);
+
+        tvViewComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
+                intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+                startActivity(intent);
+            }
+        });
 
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
@@ -63,32 +70,5 @@ public class PostDetailActivity extends AppCompatActivity {
         if (profileImage != null) {
             Glide.with(this).load(profileImage.getUrl()).circleCrop().into(ivProfileImage);
         }
-
-        allComments = new ArrayList<>();
-        adapter = new CommentsAdapter(this, allComments);
-        rvComments.setAdapter(adapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        rvComments.setLayoutManager(layoutManager);
-
-        queryComments();
-    }
-
-    private void queryComments() {
-        // Specify which class to query
-        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
-        query.include(Comment.KEY_USER);
-        query.whereEqualTo(Comment.KEY_POST_ID, postId);
-        query.setLimit(NUM_COMMENTS);
-        query.findInBackground(new FindCallback<Comment>() {
-            @Override
-            public void done(List<Comment> comments, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting comments", e);
-                    return;
-                }
-                adapter.clear();
-                adapter.addAllComments(comments);
-            }
-        });
     }
 }
