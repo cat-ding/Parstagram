@@ -35,8 +35,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvTime;
     private Post post;
     private TextView tvViewComments;
-    private ImageButton btnLike; // TODO
-    private ImageButton btnComment;
+    private ImageView ivLike; // TODO
+    private ImageView ivComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvDescription);
         tvTime = findViewById(R.id.tvTime);
         tvViewComments = findViewById(R.id.tvViewComments);
-        btnComment = findViewById(R.id.btnComment);
+        ivComment = findViewById(R.id.ivComment);
 
         tvViewComments.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +60,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        btnComment.setOnClickListener(new View.OnClickListener() {
+        ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToComments();

@@ -80,8 +80,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivProfileImage;
         private RelativeLayout relativeLayout;
         private TextView tvTime;
-        private ImageButton btnLike; // TODO
-        private ImageButton btnComment;
+        private ImageView ivLike; // TODO
+        private ImageView ivComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,7 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
             tvTime = itemView.findViewById(R.id.tvTime);
-            btnComment = itemView.findViewById(R.id.btnComment);
+            ivComment = itemView.findViewById(R.id.ivComment);
 
             itemView.setOnClickListener(this);
         }
@@ -112,7 +112,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(profileImage.getUrl()).circleCrop().into(ivProfileImage);
             }
 
-            btnComment.setOnClickListener(new View.OnClickListener() {
+            ivComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, CommentsActivity.class);
