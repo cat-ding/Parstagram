@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     public static final String TAG = "PostDetailActivity";
     public static final int NUM_COMMENTS = 10;
+    private static final String KEY_PROFILE_IMAGE = "profileImage";
     private TextView tvUsername;
     private ImageView ivProfileImage;
     private ImageView ivImage;
@@ -33,6 +35,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvTime;
     private Post post;
     private TextView tvViewComments;
+    private ImageButton btnLike; // TODO
+    private ImageButton btnComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +51,19 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvDescription);
         tvTime = findViewById(R.id.tvTime);
         tvViewComments = findViewById(R.id.tvViewComments);
+        btnComment = findViewById(R.id.btnComment);
 
         tvViewComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
-                intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                startActivity(intent);
+                goToComments();
+            }
+        });
+
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToComments();
             }
         });
 
@@ -66,9 +76,15 @@ public class PostDetailActivity extends AppCompatActivity {
             Glide.with(this).load(image.getUrl()).into(ivImage);
         }
 
-        ParseFile profileImage = post.getUser().getParseFile("profileImage");
+        ParseFile profileImage = post.getUser().getParseFile(KEY_PROFILE_IMAGE);
         if (profileImage != null) {
             Glide.with(this).load(profileImage.getUrl()).circleCrop().into(ivProfileImage);
         }
+    }
+
+    private void goToComments() {
+        Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
+        intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+        startActivity(intent);
     }
 }

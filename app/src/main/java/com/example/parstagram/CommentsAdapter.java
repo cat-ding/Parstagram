@@ -61,6 +61,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         TextView tvBody;
         TextView tvUsername;
         ImageView ivProfileImage;
+        TextView tvNoComments;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +69,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             tvBody = itemView.findViewById(R.id.tvBody);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            tvNoComments = itemView.findViewById(R.id.tvNoComments); // TODO: probably in wrong place...
         }
 
         public void bind(Comment comment) {

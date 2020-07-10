@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -35,4 +36,12 @@
         android:layout_toEndOf="@+id/tvUsername"
         android:textSize="12sp"
         tools:text="This is my comment!" />
+
+    <TextView
+        android:id="@+id/tvNoComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No comments"
+        android:visibility="gone"/>
 </RelativeLayout>

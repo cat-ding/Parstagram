@@ -1,60 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:orientation="vertical"
-    tools:context=".CommentsActivity">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar_comments"
-        layout="@layout/toolbar_comments" />
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="10dp">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/ivProfileImage"-->
-<!--            android:layout_width="30dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_alignParentStart="true"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginTop="0dp"-->
-<!--            tools:srcCompat="@tools:sample/avatars" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvUsername"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_toEndOf="@+id/ivProfileImage"-->
-<!--            android:textSize="12sp"-->
-<!--            android:textStyle="bold"-->
-<!--            tools:text="cat" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvBody"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_toEndOf="@+id/tvUsername"-->
-<!--            android:textSize="12sp"-->
-<!--            tools:text="This is my comment!" />-->
-
-<!--    </RelativeLayout>-->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvComments"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:padding="4dp" />
+        android:layout_margin="8dp"
+        android:orientation="vertical"
+        tools:context=".CommentsActivity">
 
-</LinearLayout>
+        <include
+            android:id="@+id/toolbar_comments"
+            layout="@layout/toolbar_comments" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/ivProfileImage"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="cat" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/tvUsername"
+                android:textSize="12sp"
+                tools:text="This is my comment!" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etComment"
+        android:layout_width="306dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="94dp"
+        android:layout_marginBottom="9dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        tools:text="Add a comment..." />
+
+    <Button
+        android:id="@+id/btnPost"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-45dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#3897F1"
+        android:text="Post"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>
