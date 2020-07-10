@@ -53,6 +53,7 @@ public class ProfileFragment extends Fragment {
     public static final String KEY_PROFILE_IMAGE = "profileImage";
     public static final int NUM_POSTS = 20;
     private static final int NUM_COLUMNS = 3;
+    private static final String CODEPATH_FILE_PROVIDER = "com.codepath.fileprovider";
     private RecyclerView rvPosts;
     private TextView tvUsername;
     private Button btnLogout;
@@ -132,13 +133,11 @@ public class ProfileFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i(TAG, "fetching new data!");
                 queryPosts();
             }
         });
 
         allPosts = new ArrayList<>();
-//        adapter = new PostsAdapter(getContext(), allPosts);
         adapter = new GridAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), NUM_COLUMNS);
@@ -160,7 +159,7 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = getPhotoFileUri(photoFileName);
 
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), CODEPATH_FILE_PROVIDER, photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -174,7 +173,7 @@ public class ProfileFragment extends Fragment {
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d(TAG, "failed to create directory");
+            Log.e(TAG, "failed to create directory");
         }
 
         // Return the file target for the photo based on filename

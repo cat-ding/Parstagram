@@ -98,7 +98,6 @@ public class CommentsActivity extends AppCompatActivity {
                     Toast.makeText(CommentsActivity.this, "Error while posting comment!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Log.i(TAG, "Comment save was successful!");
                 etComment.getText().clear();
                 queryComments(); // refresh
             }

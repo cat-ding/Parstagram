@@ -33,6 +33,7 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     public static final String TAG = "PostsAdapter";
+    public static final String KEY_PROFILE_IMAGE = "profileImage";
     private Context context;
     private List<Post> posts;
 
@@ -107,7 +108,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
 
-            ParseFile profileImage = post.getUser().getParseFile("profileImage");
+            ParseFile profileImage = post.getUser().getParseFile(KEY_PROFILE_IMAGE);
             if (profileImage != null) {
                 Glide.with(context).load(profileImage.getUrl()).circleCrop().into(ivProfileImage);
             }
@@ -138,7 +139,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         ivLike.setTag(R.drawable.ufi_heart_active);
                         queryNewLike(post.getObjectId());
                     } else {
-                        Log.d(TAG, "TAG ACTIVE");
                         ivLike.setImageResource(R.drawable.ufi_heart);
                         ivLike.setTag(R.drawable.ufi_heart);
                         queryDeleteLike(post.getObjectId());
@@ -161,7 +161,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         Log.e(TAG, "Error retrieving likes!", e);
                         return;
                     }
-                    Log.i(TAG, "Successfully retrieved likes!");
                     if (likes.isEmpty()) {
                         ivLike.setImageResource(R.drawable.ufi_heart);
                         ivLike.setTag(R.drawable.ufi_heart);
@@ -184,7 +183,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         Log.e(TAG, "Error while saving comment", e);
                         return;
                     }
-                    Log.i(TAG, "Like save was successful!");
                 }
             });
         }

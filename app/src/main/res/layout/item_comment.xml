@@ -37,11 +37,4 @@
         android:textSize="12sp"
         tools:text="This is my comment!" />
 
-    <TextView
-        android:id="@+id/tvNoComments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="No comments"
-        android:visibility="gone"/>
 </RelativeLayout>
