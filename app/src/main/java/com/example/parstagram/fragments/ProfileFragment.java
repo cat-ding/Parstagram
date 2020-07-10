@@ -21,12 +21,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.parstagram.EndlessRecyclerViewScrollListener;
+import com.example.parstagram.GridAdapter;
 import com.example.parstagram.LoginActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
@@ -50,12 +52,14 @@ public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
     public static final String KEY_PROFILE_IMAGE = "profileImage";
     public static final int NUM_POSTS = 20;
+    private static final int NUM_COLUMNS = 3;
     private RecyclerView rvPosts;
     private TextView tvUsername;
     private Button btnLogout;
     private Button btnChangeProfile;
     private ImageView ivProfileImage;
-    private PostsAdapter adapter;
+    private GridAdapter adapter;
+//    private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -134,9 +138,10 @@ public class ProfileFragment extends Fragment {
         });
 
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts);
+//        adapter = new PostsAdapter(getContext(), allPosts);
+        adapter = new GridAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), NUM_COLUMNS);
         rvPosts.setLayoutManager(layoutManager);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
