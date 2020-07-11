@@ -205,6 +205,7 @@ public class ProfileFragment extends Fragment {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(NUM_POSTS);
+        query.whereEqualTo(Post.KEY_USER, user);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.setSkip(NUM_POSTS * page);
         query.findInBackground(new FindCallback<Post>() {
