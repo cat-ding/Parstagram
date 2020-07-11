@@ -1,6 +1,8 @@
 package com.example.parstagram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,9 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.fragments.ProfileFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -39,6 +43,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView tvViewComments;
     private ImageView ivLike;
     private ImageView ivComment;
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvViewComments = findViewById(R.id.tvViewComments);
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
+        relativeLayout = findViewById(R.id.relativeLayout);
 
         tvViewComments.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,5 +166,14 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // transmitting tweet object back to ProfileFragment
+        Intent intent = new Intent();
+        intent.putExtra("updatedPost", Parcels.wrap(post));
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

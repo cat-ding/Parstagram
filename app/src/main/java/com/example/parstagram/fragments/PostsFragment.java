@@ -1,6 +1,13 @@
 package com.example.parstagram.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,24 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.bumptech.glide.Glide;
 import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-import java.lang.reflect.Array;
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +36,7 @@ public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
     public static final int NUM_POSTS = 20;
+    private static final int REQUEST_CODE = 25;
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
     private List<Post> allPosts;
@@ -76,7 +76,7 @@ public class PostsFragment extends Fragment {
         });
 
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts);
+        adapter = new PostsAdapter(getContext(), allPosts, this);
         rvPosts.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
@@ -129,5 +129,30 @@ public class PostsFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+            Parcelable updatedPostParcel = data.getParcelableExtra("updatedPost");
+
+            if (updatedPostParcel != null) {
+                Post updatedPost = Parcels.unwrap(updatedPostParcel);
+
+                // find adapter position (where the tweet was)
+                int position = -1;
+                for (int i = 0; i < allPosts.size(); i++) {
+                    if (allPosts.get(i).getObjectId().equals(updatedPost.getObjectId())) {
+                        position = i;
+                        break;
+                    }
+                }
+                allPosts.remove(position);
+                allPosts.add(position, updatedPost);
+                adapter.notifyItemChanged(position);
+            }
+        }
     }
 }

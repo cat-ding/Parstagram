@@ -60,7 +60,6 @@ public class ProfileFragment extends Fragment {
     private Button btnChangeProfile;
     private ImageView ivProfileImage;
     private GridAdapter adapter;
-//    private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -202,8 +201,6 @@ public class ProfileFragment extends Fragment {
                     Log.e(TAG, "Error while saving", e);
                     Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
                 }
-                Log.i(TAG, "Post save was successful!");
-                // clear out old data
                 Glide.with(getContext()).load(ParseUser.getCurrentUser().getParseFile(KEY_PROFILE_IMAGE).getUrl()).circleCrop().into(ivProfileImage);
                 queryPosts(); // update posts with new profile photo
             }

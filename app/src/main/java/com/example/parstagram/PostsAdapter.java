@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.parstagram.fragments.PostsFragment;
 import com.example.parstagram.fragments.ProfileFragment;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
@@ -34,12 +35,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     public static final String TAG = "PostsAdapter";
     public static final String KEY_PROFILE_IMAGE = "profileImage";
+    private static final int REQUEST_CODE = 25;
     private Context context;
     private List<Post> posts;
+    private PostsFragment fragment;
 
-    public PostsAdapter(Context context, List<Post> posts) {
+    public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
         this.context = context;
         this.posts = posts;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -207,7 +211,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Post post = posts.get(position);
                 Intent intent = new Intent(context, PostDetailActivity.class);
                 intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                context.startActivity(intent);
+                fragment.startActivityForResult(intent, REQUEST_CODE);
             }
         }
     }
