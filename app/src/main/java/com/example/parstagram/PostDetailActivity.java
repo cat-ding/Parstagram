@@ -1,22 +1,16 @@
 package com.example.parstagram;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
-import com.example.parstagram.fragments.ProfileFragment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -26,17 +20,16 @@ import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PostDetailActivity extends AppCompatActivity {
 
     public static final String TAG = "PostDetailActivity";
-    public static final int NUM_COMMENTS = 10;
     private static final String KEY_PROFILE_IMAGE = "profileImage";
     private TextView tvUsername;
     private ImageView ivProfileImage;
     private ImageView ivImage;
+    private TextView tvUsernameDescription;
     private TextView tvDescription;
     private TextView tvTime;
     private Post post;
@@ -44,6 +37,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageView ivLike;
     private ImageView ivComment;
     private RelativeLayout relativeLayout;
+    private TextView tvNumLikes;
+    private Integer numLikes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +55,8 @@ public class PostDetailActivity extends AppCompatActivity {
         tvViewComments = findViewById(R.id.tvViewComments);
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
+        tvUsernameDescription = findViewById(R.id.tvUsernameDescription);
+        tvNumLikes = findViewById(R.id.tvNumLikes);
         relativeLayout = findViewById(R.id.relativeLayout);
 
         tvViewComments.setOnClickListener(new View.OnClickListener() {
@@ -83,15 +80,19 @@ public class PostDetailActivity extends AppCompatActivity {
                     ivLike.setImageResource(R.drawable.ufi_heart_active);
                     ivLike.setTag(R.drawable.ufi_heart_active);
                     queryNewLike(post.getObjectId());
+                    numLikes++;
                 } else {
                     ivLike.setImageResource(R.drawable.ufi_heart);
                     ivLike.setTag(R.drawable.ufi_heart);
                     queryDeleteLike(post.getObjectId());
+                    numLikes--;
                 }
+                setNumLikes(numLikes);
             }
         });
 
         tvUsername.setText(post.getUser().getUsername());
+        tvUsernameDescription.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
         tvTime.setText(post.getTime());
 
@@ -106,6 +107,32 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
         queryLikes(post.getObjectId());
+        queryNumLikes(post.getObjectId());
+    }
+
+    private void queryNumLikes(final String postId) {
+        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+        query.include(Like.KEY_USER);
+        query.whereEqualTo(Like.KEY_POST_ID, postId);
+        query.findInBackground(new FindCallback<Like>() {
+            @Override
+            public void done(List<Like> likes, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error retrieving likes!", e);
+                    return;
+                }
+                setNumLikes(likes.size());
+                numLikes = likes.size();
+            }
+        });
+    }
+
+    private void setNumLikes(Integer num) {
+        if (num == 1) {
+            tvNumLikes.setText(num + " like");
+        } else {
+            tvNumLikes.setText(num + " likes");
+        }
     }
 
     private void queryNewLike(String postId) {
@@ -119,7 +146,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     Log.e(TAG, "Error while saving comment", e);
                     return;
                 }
-                Log.i(TAG, "Like save was successful!");
             }
         });
     }
@@ -156,7 +182,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     Log.e(TAG, "Error retrieving likes!", e);
                     return;
                 }
-                Log.i(TAG, "Successfully retrieved likes!");
                 if (likes.isEmpty()) {
                     ivLike.setImageResource(R.drawable.ufi_heart);
                     ivLike.setTag(R.drawable.ufi_heart);

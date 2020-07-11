@@ -86,6 +86,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvTime;
         private ImageView ivLike;
         private ImageView ivComment;
+        private TextView tvUsernameDescription;
+        private TextView tvNumLikes;
+        private Integer numLikes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,6 +100,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvTime = itemView.findViewById(R.id.tvTime);
             ivComment = itemView.findViewById(R.id.ivComment);
             ivLike = itemView.findViewById(R.id.ivLike);
+            tvUsernameDescription = itemView.findViewById(R.id.tvUsernameDescription);
+            tvNumLikes = itemView.findViewById(R.id.tvNumLikes);
 
             itemView.setOnClickListener(this);
         }
@@ -106,6 +111,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
             tvTime.setText(post.getTime());
+            tvUsernameDescription.setText(post.getUser().getUsername());
 
             ParseFile image = post.getImage();
             if (image != null) {
@@ -142,15 +148,44 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         ivLike.setImageResource(R.drawable.ufi_heart_active);
                         ivLike.setTag(R.drawable.ufi_heart_active);
                         queryNewLike(post.getObjectId());
+                        numLikes++;
                     } else {
                         ivLike.setImageResource(R.drawable.ufi_heart);
                         ivLike.setTag(R.drawable.ufi_heart);
                         queryDeleteLike(post.getObjectId());
+                        numLikes--;
                     }
+                    setNumLikes(numLikes);
                 }
             });
 
             queryLikes(post.getObjectId());
+            queryNumLikes(post.getObjectId());
+        }
+
+        private void queryNumLikes(final String postId) {
+            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+            query.include(Like.KEY_USER);
+            query.whereEqualTo(Like.KEY_POST_ID, postId);
+            query.findInBackground(new FindCallback<Like>() {
+                @Override
+                public void done(List<Like> likes, ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "Error retrieving likes!", e);
+                        return;
+                    }
+                    setNumLikes(likes.size());
+                    numLikes = likes.size();
+                }
+            });
+        }
+
+        private void setNumLikes(Integer num) {
+            if (num == 1) {
+                tvNumLikes.setText(num + " like");
+            } else {
+                tvNumLikes.setText(num + " likes");
+            }
         }
 
         private void queryLikes(String postId) {

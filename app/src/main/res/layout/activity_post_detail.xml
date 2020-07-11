@@ -89,17 +89,44 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/tvDescription"
+        android:id="@+id/tvNumLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        tools:text="500 likes" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        tools:text="look at my post!" />
+        android:layout_marginTop="3dp">
+
+        <TextView
+            android:id="@+id/tvUsernameDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            tools:text="cat" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/tvUsernameDescription"
+            tools:text="look at my post!" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="8dp"
         android:textSize="11sp"
         tools:text="1 hour ago" />
 
@@ -107,7 +134,8 @@
         android:id="@+id/tvViewComments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="8dp"
         android:background="@null"
         android:text="View all comments"
         android:textColor="#787878" />
