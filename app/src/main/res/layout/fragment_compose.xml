@@ -31,6 +31,26 @@
         tools:context=".fragments.ComposeFragment">
 
 
+        <ImageView
+            android:id="@+id/ivPostImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/btnCaptureImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="#3897F1"
+            android:text="Take A Picture"
+            android:textColor="#FFFFFF" />
+
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
@@ -42,31 +62,13 @@
             android:hint="Description..." />
 
         <Button
-            android:id="@+id/btnCaptureImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:text="Take Picture" />
-
-        <ImageView
-            android:id="@+id/ivPostImage"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <Button
             android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:text="Submit" />
+            android:text="Post" />
 
     </LinearLayout>
 
