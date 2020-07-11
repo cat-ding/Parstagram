@@ -2,8 +2,6 @@ package com.example.parstagram.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,14 +32,11 @@ import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,7 +143,6 @@ public class ProfileFragment extends Fragment {
                 loadMoreData(page);
             }
         };
-        // add the scroll listener to the recyclerview
         rvPosts.addOnScrollListener(scrollListener);
 
         queryPosts();

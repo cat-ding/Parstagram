@@ -112,7 +112,6 @@ public class PostsFragment extends Fragment {
     }
 
     private void queryPosts() {
-        // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(NUM_POSTS);
@@ -131,6 +130,7 @@ public class PostsFragment extends Fragment {
         });
     }
 
+    // update the post after liking/unliking coming back from PostDetailActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -21,7 +21,6 @@ public class Post extends ParseObject {
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
-
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }

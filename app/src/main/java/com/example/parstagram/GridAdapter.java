@@ -19,7 +19,6 @@ import java.util.List;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
-    public static final String TAG = "GridAdapter";
     private Context context;
     private List<Post> posts;
 
@@ -69,7 +68,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final Post post) {
+        public void bind(Post post) {
 
             ParseFile image = post.getImage();
             if (image != null) {
